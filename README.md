@@ -14,14 +14,21 @@
 
 ## Endpoints
 
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/filings' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/filings/1' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/filings/1/awards' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/filings/1/awards/1' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/addresses' | jq`
-`curl --header 'Accept: application/json' 'http://localhost:3003/api/organizations/1/addresses/1' | jq`
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1/awards' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1/awards/1' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/addresses' | jq`
+
+`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/addresses/1' | jq`
 
 ### Total time: 12 hours
 
@@ -51,6 +58,7 @@ Example: “The filer’s 2015 filing declares that they gave 18 awards to 12 di
   - Serialized recipients
 - Consider additional request parameters by endpoint (e.g. filter recipients by filing, filter recipients by state, filter recipients by cash amount, etc).
 - Be sure to read the [Frontend Requirements](#frontend-requirements) when building and extending the API!
+- Bonus points for deploying to Heroku
 
 ## Filing Urls
 
@@ -88,11 +96,11 @@ Example: “The filer’s 2015 filing declares that they gave 18 awards to 12 di
     - Zip: {ZIPCode,ZIPCd}
   - Award Amount: {AmountOfCashGrant,CashGrantAmt}
 
-- Paths may vary by schema version
+\* Paths may vary by schema version
 
 ## Frontend Requirements
 
-Go ahead and show off a little bit! Build something great that utilizes your new API. Build a UI that enables the user to explore the historical awards of a filer. What information is relevant? How should they navigate the data? Obviously, you don’t have infinite time, so feel free to stub out functionality or leave comments for things you didn’t get to finish. We understand!
+Go ahead and show off a little bit! Build something great that utilizes the API. Build a UI that enables the user to explore the historical awards of a filer. What information is relevant? How should they navigate the data? Obviously, you don’t have infinite time, so feel free to stub out functionality or leave comments for things you didn’t get to finish. We understand!
 
 The only requirements for the frontend are that you leverage your new API in Javascript (please, no Backbone.js).
 
