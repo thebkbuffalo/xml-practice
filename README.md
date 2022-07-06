@@ -124,11 +124,11 @@ The only requirements for the frontend are that you leverage your new API in Jav
 
 Please fork this repo into a private Github repository and share access with the following Github accounts.
 
-@eyupatis
-@gsinkin-instrumentl
-@furkan-instrumentl
-@hope-instrumentl
-@instrumentl707
+[@eyupatis](https://github.com/eyupatis)
+[@gsinkin-instrumentl](https://github.com/gsinkin-instrumentl)
+[@furkan-instrumentl](https://github.com/furkan-instrumentl)
+[@hope-instrumentl](https://github.com/hope-instrumentl)
+[@instrumentl707](https://github.com/instrumentl707)
 
 ## Questions or Issues
 
