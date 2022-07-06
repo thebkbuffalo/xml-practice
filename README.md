@@ -14,21 +14,37 @@
 
 ## Endpoints
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations' | jq`
+### Organizations List
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1' | jq`
+`curl 'http://localhost:3000/api/organizations.json'`
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings' | jq`
+### Organization By ID
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1' | jq`
+`curl 'http://localhost:3000/api/organizations/1.json'`
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1/awards' | jq`
+### Organization Filings
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/filings/1/awards/1' | jq`
+`curl 'http://localhost:3000/api/organizations/1/filings.json'`
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/addresses' | jq`
+### Organization Filings by ID
 
-`curl --header 'Accept: application/json' 'http://localhost:3000/api/organizations/1/addresses/1' | jq`
+`curl 'http://localhost:3000/api/organizations/1/filings/1.json'`
+
+### Awards by Filing
+
+`curl 'http://localhost:3000/api/organizations/1/filings/1/awards.json'`
+
+### Award by ID
+
+`curl 'http://localhost:3000/api/organizations/1/filings/1/awards/1.json'`
+
+### Organization Addresses
+
+`curl 'http://localhost:3000/api/organizations/1/addresses.json'`
+
+### Organization Address by ID
+
+`curl 'http://localhost:3000/api/organizations/1/addresses/1.json'`
 
 ### Total time: 12 hours
 
