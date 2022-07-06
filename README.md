@@ -96,21 +96,21 @@ Example: “The filer’s 2015 filing declares that they gave 18 awards to 12 di
 - Filer Path: `Return/ReturnHeader/Filer`
   - EIN: `EIN`
   - Name: `{Name,BusinessName}/{BusinessNameLine1,BusinessNameLine1Txt}`
-  - Address: {USAddress,AddressUS}
-  - Line 1: {AddressLine1,AddressLine1Txt}
-  - City: {City,CityNm}
-  - State: {State,StateAbbreviationCd}
-  - Zip: {ZIPCode,ZIPCd}
-- Award List Path: Return/ReturnData/IRS990ScheduleI/RecipientTable
+  - Address: `{USAddress,AddressUS}`
+  - Line 1: `{AddressLine1,AddressLine1Txt}`
+  - City: `{City,CityNm}`
+  - State: `{State,StateAbbreviationCd}`
+  - Zip: `{ZIPCode,ZIPCd}`
+- Award List Path: `Return/ReturnData/IRS990ScheduleI/RecipientTable`
 
-  - EIN: {EINOfRecipient,RecipientEIN}
-  - Recipient Name: {RecipientNameBusiness,RecipientBusinessName}/{BusinessNameLine1,BusinessNameLine1Txt}
-  - Recipient Address: {USAddress,AddressUS}
-    - Line 1: {AddressLine1,AddressLine1Txt}
-    - City: {City,CityNm}
-    - State: {State,StateAbbreviationCd}
-    - Zip: {ZIPCode,ZIPCd}
-  - Award Amount: {AmountOfCashGrant,CashGrantAmt}
+  - EIN: `{EINOfRecipient,RecipientEIN}`
+  - Recipient Name: `{RecipientNameBusiness,RecipientBusinessName}/{BusinessNameLine1,BusinessNameLine1Txt}`
+  - Recipient Address: `{USAddress,AddressUS}`
+    - Line 1: `{AddressLine1,AddressLine1Txt}`
+    - City: `{City,CityNm}`
+    - State: `{State,StateAbbreviationCd}`
+    - Zip: `{ZIPCode,ZIPCd}`
+  - Award Amount: `{AmountOfCashGrant,CashGrantAmt}`
 
 \* Paths may vary by schema version
 
