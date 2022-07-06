@@ -1,0 +1,7 @@
+<h1>Organizations</h1>
+
+<% @organizations.each do |organization| %>
+<div>
+  <%= organization.name %>: <%= organization.ein %>
+</div>
+<% end %>
