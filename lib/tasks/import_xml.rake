@@ -45,7 +45,12 @@ namespace :import_xml do
       # gets first line of address based on AddressLine1 or AddressLine1Txt
       filer_address_line_1 = filer_address.search('addressline1').any? ? 
         get_data(filer_address.search('addressline1')) : get_data(filer_address.search('addressline1txt'))
-      
+      # gets filer city based on City or CityNm
+      filer_city = filer_address.search('city').any? ? get_data(filer_address.search('city')) : get_data(filer_address.search('citynm'))
+      # gets filer state based on State or StateAbbreviationCd
+      filer_state = filer_address.search('state').any? ? get_data(filer_address.search('state')) : get_data(filer_address.search('stateabbreviationcd'))
+      # gets filer zipcode based on ZIPcode or ZIPCd
+      filer_zipcode = filer_address.search('zipcd').any? ? get_data(filer_address.search('zipcd')) : get_data(filer_address.search('zipcode'))
       
 
 
@@ -54,6 +59,9 @@ namespace :import_xml do
       puts(filer_ein)
       puts(filer_name)
       puts(filer_address_line_1)
+      puts(filer_city)
+      puts(filer_state)
+      puts(filer_zipcode)
       puts('------------')
       # binding.pry
 
