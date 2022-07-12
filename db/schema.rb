@@ -11,8 +11,11 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_07_05_234633) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "addresses", force: :cascade do |t|
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.string "address"
     t.string "address2"
     t.string "city"
@@ -23,8 +26,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_234633) do
   end
 
   create_table "awards", force: :cascade do |t|
-    t.integer "filing_id", null: false
-    t.integer "receiver_id", null: false
+    t.bigint "filing_id", null: false
+    t.bigint "receiver_id", null: false
     t.string "purpose"
     t.string "irs_section"
     t.bigint "cash_amount", default: 0, null: false
@@ -36,7 +39,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_234633) do
   end
 
   create_table "filings", force: :cascade do |t|
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.string "tax_period", null: false
     t.string "xml_url", null: false
     t.datetime "created_at", null: false
