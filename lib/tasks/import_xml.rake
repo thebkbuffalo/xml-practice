@@ -19,21 +19,16 @@ namespace :import_xml do
       return node&.children&.text&.strip
     end
 
-    def create_filer_org_and_addy(filer)
-
+    def create_receiver_org_award_and_addy(award)
+      # binding.pry
     end
-
-    def create_receiver_org_award_and_addy(receiver)
-
-    end
+    
+    # array of created filer ein numbers to check to make sure we're not trying to create the same organization
     filer_ein_numbers = []
     irs_forms.each do |form|
       doc = Nokogiri::HTML(URI.open(form))
       return_header = doc.root.search('returnheader')
       return_data = doc.root.search('returndata')
-
-      tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
-
       # filer is the organization giving money. this should be created first in the process so the orgs receiving/awards/filings can be properly associated
       filer = return_header.search('filer')
       begin
@@ -61,7 +56,16 @@ namespace :import_xml do
             country: "US"
           )
           filer_ein_numbers.push(filer_ein)
+          tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
+          if new_filer_organization.present?
+            new_filer_organization.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
+          else
+            org = Organization.find_by(ein: filer_ein)
+            org.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
+          end
+
         end
+
       rescue => error
         puts(error)
       end
