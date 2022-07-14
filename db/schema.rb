@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_14_030443) do
     t.string "xml_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["organization_id", "tax_period"], name: "index_filings_on_organization_id_and_tax_period", unique: true
+    t.index ["organization_id", "tax_period"], name: "index_filings_on_organization_id_and_tax_period"
     t.index ["organization_id"], name: "index_filings_on_organization_id"
   end
 

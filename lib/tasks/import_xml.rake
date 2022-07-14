@@ -23,8 +23,9 @@ namespace :import_xml do
       
     end
     
-    # array of created filer ein numbers to check to make sure we're not trying to create the same organization
+    # array of created filer ein numbers to check to make sure we're not trying to create duplicates
     filer_ein_numbers = []
+    # array of created recipient eins for checking against current one in iteration so we don't attempt to create duplicates
     recpient_eins_list = []
     irs_forms.each do |form|
       doc = Nokogiri::HTML(URI.open(form))
@@ -35,16 +36,12 @@ namespace :import_xml do
       # below we're pulling out filer data to create the filing organization, their address, and the filing object.
       begin
         filer_ein = filer.search('ein').first.children.text
+        # check to see if the filer already exists
         if !filer_ein_numbers.include?(filer_ein)
-           # gets filer name from either businessnameline1 or businessnameline1txt
           filer_name = filer.search('businessnameline1').any? ? get_data(filer.search('businessnameline1')) : get_data(filer.search('businessnameline1txt'))
-          # gets first line of address based on AddressLine1 or AddressLine1Txt
           filer_address_line_1 = filer.search('addressline1').any? ? get_data(filer.search('addressline1')) : get_data(filer.search('addressline1txt'))
-          # gets filer city based on City or CityNm
           filer_city = filer.search('city').any? ? get_data(filer.search('city')) : get_data(filer.search('citynm'))
-          # gets filer state based on State or StateAbbreviationCd
           filer_state = filer.search('state').any? ? get_data(filer.search('state')) : get_data(filer.search('stateabbreviationcd'))
-          # gets filer zipcode based on ZIPcode or ZIPCd
           filer_zipcode = filer.search('zipcd').any? ? get_data(filer.search('zipcd')) : get_data(filer.search('zipcode'))
           new_filer_organization = Organization.create(name: filer_name, ein: filer_ein, is_filer: true)
           new_filer_organization.addresses.create(
@@ -54,22 +51,28 @@ namespace :import_xml do
             zip_code: filer_zipcode,
             country: "US"
           )
+          
+          # new_filing = new_filer_organization.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
           filer_ein_numbers.push(filer_ein)
-          tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
-          if new_filer_organization.present?
-            new_filing = new_filer_organization.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
-          else
-            org = Organization.filer_orgs.find_by(ein: filer_ein)
-            new_filing = org.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
-          end
+        end
+        tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
+        if new_filer_organization.present?
+          new_filing = new_filer_organization.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
+        else
+          org = Organization.filer_orgs.find_by(ein: filer_ein)
+          new_filing = org.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
         end
       rescue => error
-        # puts(error)
+        puts('filer creation' + error.message.to_s)
       end
+
+      # receiver organization, their address, and award creation 
       awards_list = return_data.search('recipienttable')
+      puts(new_filing.id)
       awards_list.each do |award|
         begin
           recipient_ein = award.search('einofrecipient').any? ? get_data(award.search('einofrecipient')) : get_data(award.search('recipientein'))
+          # check to see if recipient already exists
           if !recpient_eins_list.include?(recipient_ein)
             name = award.search('businessnameline1').any? ? get_data(award.search('businessnameline1')) : get_data(award.search('businessnameline1txt'))
             address_line_1 = award.search('addressline1').any? ? get_data(award.search('addressline1')) : get_data(award.search('addressline1txt'))
@@ -99,7 +102,7 @@ namespace :import_xml do
         irs_section = award.search('ircsection').any? ? get_data(award.search('ircsection')) : get_data(award.search('ircsectiondesc'))
         begin
           Award.create(
-            filing_id: Filing.last.id,
+            filing_id: new_filing.id,
             receiver_id: new_org_id,
             purpose: purpose,
             irs_section: irs_section,

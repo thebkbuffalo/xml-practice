@@ -27,7 +27,7 @@ class InitialMigration < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-    add_index :filings, [:organization_id, :tax_period], unique: true
+    add_index :filings, [:organization_id, :tax_period] #, unique: true
 
     create_table :awards do |t|
       t.references :filing, null: false
