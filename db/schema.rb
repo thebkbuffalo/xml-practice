@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_05_234633) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_14_030443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_05_234633) do
     t.string "ein"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_filer", default: false
+    t.boolean "is_receiver", default: false
     t.index ["ein"], name: "index_organizations_on_ein", unique: true
   end
 
