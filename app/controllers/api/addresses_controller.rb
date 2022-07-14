@@ -30,7 +30,7 @@ module Api
     end
 
     def default_order_by
-      "name"
+      "zip_code"
     end
   end
 end

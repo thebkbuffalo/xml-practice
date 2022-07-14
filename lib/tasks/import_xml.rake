@@ -51,16 +51,18 @@ namespace :import_xml do
             zip_code: filer_zipcode,
             country: "US"
           )
-          
-          # new_filing = new_filer_organization.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
           filer_ein_numbers.push(filer_ein)
         end
-        tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
-        if new_filer_organization.present?
-          new_filing = new_filer_organization.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
+        current_org = if new_filer_organization.present?
+          new_filer_organization
         else
-          org = Organization.filer_orgs.find_by(ein: filer_ein)
-          new_filing = org.filings.create(tax_period: tax_year, xml_url: 'https://www.instrumentl.com')
+          Organization.find_by(ein: filer_ein)
+        end
+        tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
+        if !current_org.filings.collect(&:tax_period).include?(tax_year)
+          new_filing = current_org.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
+        else
+          new_filing = current_org.filings.find_by(tax_period: tax_year)
         end
       rescue => error
         puts('filer creation' + error.message.to_s)
@@ -68,7 +70,6 @@ namespace :import_xml do
 
       # receiver organization, their address, and award creation 
       awards_list = return_data.search('recipienttable')
-      puts(new_filing.id)
       awards_list.each do |award|
         begin
           recipient_ein = award.search('einofrecipient').any? ? get_data(award.search('einofrecipient')) : get_data(award.search('recipientein'))
@@ -113,19 +114,6 @@ namespace :import_xml do
           puts('award error --- ' + error.message.to_s)
         end
       end
-
-
-      # puts('----------')
-      # puts(tax_year)
-      # puts(filer_ein)
-      # puts(filer_name)
-      # puts(filer_address_line_1)
-      # puts(filer_city)
-      # puts(filer_state)
-      # puts(filer_zipcode)
-      # puts('------------')
-
     end
   end
-
 end

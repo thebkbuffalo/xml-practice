@@ -11,5 +11,6 @@ Rails.application.routes.draw do
       end
       resources :addresses, only: [:index, :show]
     end
+    resources :home
   end
 end
