@@ -3,7 +3,8 @@ module Api
     before_action :ensure_json_request
 
     def index
-      @organizations = Organization
+      @organizations = Organization.receiver_orgs
+      @filer_organizations = Organization.filer_orgs
       if org_params[:search].present?
         @organizations = @organizations.where(
           "name LIKE ?",
@@ -21,6 +22,7 @@ module Api
             ).per(
               pagination_params[:per_page]
             ),
+            filer_organizations: @filer_organizations,
             total_count: @organizations.count
           }
         }
