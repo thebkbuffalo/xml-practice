@@ -8,6 +8,9 @@
 
 `rake db:migrate; rake db:seed`
 
+to import xml data from urls below run 
+`rake import_xml:batch_import` or `heroku run rake import_xml:batch_import` if on heroku.
+
 ## Running the server
 
 `rails s`
