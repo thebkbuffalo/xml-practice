@@ -3,7 +3,7 @@ module Api
     before_action :ensure_json_request
 
     def index
-      @organizations = Organization.last(5)
+      @organizations = Organization.last(15)
       filings = Filing.last(5)
       @robust_filings = filings.map do |f|
         {
