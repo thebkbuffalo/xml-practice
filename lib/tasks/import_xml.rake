@@ -15,12 +15,9 @@ namespace :import_xml do
       'http://s3.amazonaws.com/irs-form-990/201831359349101003_public.xml'
     ]
 
+    # simple lil method to get data from xml node
     def get_data(node)
       return node&.children&.text&.strip
-    end
-
-    def create_receiver_org_award_and_addy(award, filing_id)
-      
     end
     
     # array of created filer ein numbers to check to make sure we're not trying to create duplicates
@@ -43,7 +40,9 @@ namespace :import_xml do
           filer_city = filer.search('city').any? ? get_data(filer.search('city')) : get_data(filer.search('citynm'))
           filer_state = filer.search('state').any? ? get_data(filer.search('state')) : get_data(filer.search('stateabbreviationcd'))
           filer_zipcode = filer.search('zipcd').any? ? get_data(filer.search('zipcd')) : get_data(filer.search('zipcode'))
+          # creating the filer organization first
           new_filer_organization = Organization.create(name: filer_name, ein: filer_ein, is_filer: true)
+          # creating the filer orgs address
           new_filer_organization.addresses.create(
             address: filer_address_line_1,
             city: filer_city,
@@ -53,12 +52,15 @@ namespace :import_xml do
           )
           filer_ein_numbers.push(filer_ein)
         end
+        # here we check if the new filer exists or if we need to pull the filer based on their EIN
         current_org = if new_filer_organization.present?
           new_filer_organization
         else
           Organization.find_by(ein: filer_ein)
         end
         tax_year = return_header.search('taxyr').any? ? get_data(return_header.search('taxyr')) : get_data(return_header.search('taxyear'))
+        # here we check to see if the filing org has a tax submission of the same year, 
+        #if they don't we create a new filing, if they do we just return the filing from that year to use later.
         if !current_org.filings.collect(&:tax_period).include?(tax_year)
           new_filing = current_org.filings.create(tax_period: tax_year, xml_url: "https://www.instrumentl.com")
         else
@@ -80,7 +82,9 @@ namespace :import_xml do
             city = award.search('city').any? ? get_data(award.search('city')) : get_data(award.search('citynm'))
             state = award.search('state').any? ? get_data(award.search('state')) : get_data(award.search('stateabbreviationcd'))
             zip = award.search('zipcode').any? ? get_data(award.search('zipcode')) : get_data(award.search('zipcd'))
+            # now we create the receiver org
             new_organization = Organization.create(name: name, ein: recipient_ein, is_receiver: true)
+            # next we create said orgs address
             new_organization.addresses.create(
               address: address_line_1,
               city: city,
@@ -93,6 +97,7 @@ namespace :import_xml do
         rescue => error
           puts('new rec org --- ' + error.message.to_s)
         end
+        # here we check for an existing new orgniazation, if one doesnt exist we find the relevant org by EIN
         if new_organization.present?
           new_org_id = new_organization.id
         else
@@ -101,6 +106,7 @@ namespace :import_xml do
         amount = award.search('amountofcashgrant').any? ? get_data(award.search('amountofcashgrant')) : get_data(award.search('cashgrantamt'))
         purpose = award.search('purposeofgrant').any? ? get_data(award.search('purposeofgrant')) : get_data(award.search('purposeofgranttxt'))
         irs_section = award.search('ircsection').any? ? get_data(award.search('ircsection')) : get_data(award.search('ircsectiondesc'))
+        # here we create the award with the proper filing and org associations
         begin
           Award.create(
             filing_id: new_filing.id,

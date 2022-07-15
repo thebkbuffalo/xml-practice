@@ -29,6 +29,7 @@ module Api
       end
     end
 
+    # had to change this from name since that was causing issues
     def default_order_by
       "zip_code"
     end

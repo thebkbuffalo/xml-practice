@@ -2,6 +2,8 @@ module Api
   class HomeController < Api::BaseController
     before_action :ensure_json_request
 
+    # home controller created for home page of app. pulling in various bits of data for a dashboard-esque type of page
+    
     def index
       @organizations = Organization.last(15)
       filings = Filing.last(5)
